@@ -1,0 +1,42 @@
+# Aerial Guardian - Pipeline Configuration
+
+detector:
+  model: "yolov8n.pt"          # base model (~6MB, well under 300MB limit)
+  confidence: 0.25             # lower threshold catches more small persons
+  iou_threshold: 0.45
+  device: "cpu"                # change to "cuda:0" if GPU available
+  target_class: 0              # COCO class 0 = person
+
+  # SAHI sliced inference settings (key adaptation for small object detection)
+  # Set to true for higher recall on tiny persons (slower: ~1 FPS CPU, ~15 FPS GPU)
+  # Set to false for faster processing (~10 FPS CPU) — recommended for first run
+  use_sahi: false
+  slice_height: 640
+  slice_width: 640
+  overlap_height_ratio: 0.2    # 20% overlap prevents boundary misses
+  overlap_width_ratio: 0.2
+  postprocess_match_threshold: 0.5
+
+tracker:
+  type: "botsort"              # botsort has built-in camera motion compensation
+  # ByteTrack alternative: "bytetrack"
+
+  # BoT-SORT specific
+  track_high_thresh: 0.5       # high confidence detection threshold
+  track_low_thresh: 0.1        # low confidence (used in second association)
+  new_track_thresh: 0.6        # threshold to start new track
+  track_buffer: 30             # frames to keep lost tracks alive
+  match_thresh: 0.8            # IoU match threshold
+  cmc_method: "ecc"            # Enhanced Correlation Coefficient for camera motion comp
+
+visualizer:
+  tail_length: 40              # number of past positions to draw as trajectory tail
+  box_thickness: 2
+  text_scale: 0.5
+  show_confidence: false
+  show_fps: true
+
+output:
+  save_video: true
+  video_fps: 30
+  codec: "mp4v"

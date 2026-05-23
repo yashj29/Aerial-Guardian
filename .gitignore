@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pt
+*.pth
+*.onnx
+*.engine
+outputs/
+*.tmp.avi
+web/node_modules/
+web/dist/
+.env
